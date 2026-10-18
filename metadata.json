@@ -1,0 +1,6 @@
+{
+  "name": "Building Construction Portal",
+  "description": "Professional construction management portal for worker directory, secure individual profile access, activity logs, and admin dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

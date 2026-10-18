@@ -1,0 +1,177 @@
+{
+  "entities": {
+    "Worker": {
+      "title": "Worker",
+      "description": "Construction site worker with ledger and profile records",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique worker identifier",
+          "maxLength": 64
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the worker",
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "description": "Job role on the construction site",
+          "maxLength": 100
+        },
+        "password": {
+          "type": "string",
+          "description": "Access password for the worker",
+          "maxLength": 64
+        },
+        "dp": {
+          "type": "string",
+          "description": "Display picture URL or base64 data",
+          "maxLength": 500000
+        },
+        "attendance": {
+          "type": "string",
+          "description": "Attendance status or string",
+          "maxLength": 64
+        },
+        "leave": {
+          "type": "string",
+          "description": "Leave count or days",
+          "maxLength": 32
+        },
+        "expWeek": {
+          "type": "string",
+          "description": "1 day expense amount",
+          "maxLength": 64
+        },
+        "expense": {
+          "type": "string",
+          "description": "Month expense total",
+          "maxLength": 64
+        },
+        "total": {
+          "type": "string",
+          "description": "Total rupees sum",
+          "maxLength": 64
+        },
+        "excelRows": {
+          "type": "object",
+          "description": "Map of year to month to array of ledger rows"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update ISO timestamp",
+          "maxLength": 64
+        }
+      },
+      "required": ["name", "role", "password"]
+    },
+    "Activity": {
+      "title": "Activity",
+      "description": "Monthly site work log and task entry",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique activity identifier",
+          "maxLength": 64
+        },
+        "workerId": {
+          "type": "string",
+          "description": "Associated worker identifier",
+          "maxLength": 64
+        },
+        "workerName": {
+          "type": "string",
+          "description": "Name of the worker who completed the activity",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the work completed",
+          "maxLength": 500
+        },
+        "date": {
+          "type": "string",
+          "description": "Date formatted as YYYY-MM-DD",
+          "maxLength": 32
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update ISO timestamp",
+          "maxLength": 64
+        }
+      },
+      "required": ["workerName", "description", "date"]
+    },
+    "Slide": {
+      "title": "Slide",
+      "description": "Hero showcase banner or video item",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique slide identifier",
+          "maxLength": 64
+        },
+        "title": {
+          "type": "string",
+          "description": "Slide headline title",
+          "maxLength": 200
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Slide descriptive subtitle",
+          "maxLength": 300
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "image or video",
+          "enum": ["image", "video"]
+        },
+        "mediaUrl": {
+          "type": "string",
+          "description": "Media content URL or data URL",
+          "maxLength": 500000
+        },
+        "posterUrl": {
+          "type": "string",
+          "description": "Poster preview URL",
+          "maxLength": 500000
+        },
+        "tag": {
+          "type": "string",
+          "description": "Tag badge text",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update ISO timestamp",
+          "maxLength": 64
+        }
+      },
+      "required": ["title", "mediaType", "mediaUrl"]
+    }
+  },
+  "firestore": {
+    "/workers/{workerId}": {
+      "schema": {
+        "$ref": "#/entities/Worker"
+      },
+      "description": "Collection of construction site workers with excel ledgers"
+    },
+    "/activities/{activityId}": {
+      "schema": {
+        "$ref": "#/entities/Activity"
+      },
+      "description": "Collection of monthly site activities"
+    },
+    "/slides/{slideId}": {
+      "schema": {
+        "$ref": "#/entities/Slide"
+      },
+      "description": "Collection of media showcase slides"
+    }
+  }
+}

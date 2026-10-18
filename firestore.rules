@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Workers collection: workers and admin can view; admin can write & update ledger
+    match /workers/{workerId} {
+      allow read: if isValidId(workerId);
+      allow create, update: if isValidId(workerId)
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100
+        && request.resource.data.role is string && request.resource.data.role.size() > 0 && request.resource.data.role.size() <= 100
+        && request.resource.data.password is string && request.resource.data.password.size() > 0 && request.resource.data.password.size() <= 64;
+      allow delete: if isValidId(workerId);
+    }
+
+    // Activities collection
+    match /activities/{activityId} {
+      allow read: if isValidId(activityId);
+      allow create, update: if isValidId(activityId)
+        && request.resource.data.workerName is string && request.resource.data.workerName.size() > 0 && request.resource.data.workerName.size() <= 100
+        && request.resource.data.description is string && request.resource.data.description.size() > 0 && request.resource.data.description.size() <= 500;
+      allow delete: if isValidId(activityId);
+    }
+
+    // Slides collection
+    match /slides/{slideId} {
+      allow read: if isValidId(slideId);
+      allow create, update: if isValidId(slideId)
+        && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 200
+        && request.resource.data.mediaType in ['image', 'video']
+        && request.resource.data.mediaUrl is string && request.resource.data.mediaUrl.size() > 0 && request.resource.data.mediaUrl.size() <= 500000;
+      allow delete: if isValidId(slideId);
+    }
+  }
+}
