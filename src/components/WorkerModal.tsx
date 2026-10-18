@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Worker, WorkerActivity, ExcelRowItem } from '../types';
 import { MONTHS, MONTHS_HINDI } from '../data/initialData';
-import { FileSpreadsheet, Printer, Calendar, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { FileSpreadsheet, Printer, Calendar, ShieldCheck, CheckCircle2, FileText } from 'lucide-react';
+import { generateWorkerLedgerPDF } from '../utils/pdfGenerator';
 
 interface WorkerModalProps {
   worker: Worker | null;
@@ -44,6 +45,10 @@ export const WorkerModal: React.FC<WorkerModalProps> = ({ worker, activities = [
   // Only rows added by admin
   const workerExcelRows: ExcelRowItem[] =
     worker.excelRows?.[selectedYear]?.[selectedMonth] || [];
+
+  const handleDownloadPDF = () => {
+    generateWorkerLedgerPDF(worker, selectedYear, selectedMonth, workerExcelRows);
+  };
 
   const handlePrint = () => {
     window.print();
@@ -152,6 +157,15 @@ export const WorkerModal: React.FC<WorkerModalProps> = ({ worker, activities = [
                     ))}
                   </select>
                 </div>
+
+                <button
+                  onClick={handleDownloadPDF}
+                  className="px-3 py-1.5 text-xs font-bold text-white bg-red-700 hover:bg-red-800 rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer transition-colors border border-red-600"
+                  title="Download Official PDF Ledger"
+                >
+                  <FileText className="w-3.5 h-3.5 text-white" />
+                  <span>Download PDF (पीडीएफ)</span>
+                </button>
 
                 <button
                   onClick={handlePrint}

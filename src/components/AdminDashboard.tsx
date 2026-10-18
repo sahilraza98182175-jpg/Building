@@ -9,7 +9,10 @@ import {
   Image as ImageIcon,
   Plus,
   Play,
-  ExternalLink
+  ExternalLink,
+  Globe,
+  Copy,
+  Check
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -170,8 +173,76 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setSlideFilePreview('');
   };
 
+  const [copiedLiveUrl, setCopiedLiveUrl] = useState(false);
+  const livePublicUrl =
+    typeof window !== 'undefined' && window.location.origin.includes('run.app')
+      ? window.location.origin
+      : 'https://ais-pre-ko4j26az6uxeffy2tkzggf-345357399823.asia-southeast1.run.app';
+
+  const handleCopyLiveUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(livePublicUrl);
+      setCopiedLiveUrl(true);
+      setTimeout(() => setCopiedLiveUrl(false), 2500);
+    } catch {
+      const input = document.createElement('input');
+      input.value = livePublicUrl;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      setCopiedLiveUrl(true);
+      setTimeout(() => setCopiedLiveUrl(false), 2500);
+    }
+  };
+
   return (
     <div className="max-w-[1100px] mx-auto px-5 py-8 w-full space-y-8">
+      {/* 🌐 LIVE WEBSITE FULL URL TO PUBLISH & SHARE */}
+      <section className="bg-gradient-to-r from-[#1a252f] via-[#243342] to-[#1a252f] rounded-xl p-5 text-white shadow-xl border border-slate-700">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-700/80 mb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-[#e67e22]">
+              <Globe className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                <span>Live Website Full URL to Publish</span>
+                <span className="text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full">
+                  ● 24/7 Firebase Active
+                </span>
+              </h2>
+              <p className="text-[11px] text-slate-300">
+                Is link ko aap workers aur clients ke saath share kar sakte hain
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCopyLiveUrl}
+              className="bg-[#e67e22] hover:bg-[#d35400] text-white px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all shadow cursor-pointer"
+            >
+              {copiedLiveUrl ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedLiveUrl ? 'Link Copied!' : 'Copy Full URL'}</span>
+            </button>
+            <a
+              href={livePublicUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Open</span>
+            </a>
+          </div>
+        </div>
+
+        <div className="bg-black/30 rounded-lg p-2.5 flex items-center justify-between gap-3 border border-slate-700/60 font-mono text-xs sm:text-sm text-amber-200 break-all select-all">
+          <span>{livePublicUrl}</span>
+        </div>
+      </section>
+
       {/* Reset button banner */}
       <div className="flex justify-between items-center bg-slate-900/60 p-3 rounded-lg border border-slate-700">
         <span className="text-xs text-slate-300">

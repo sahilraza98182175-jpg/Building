@@ -10,6 +10,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { ExcelSheetModal } from './components/ExcelSheetModal';
 import { MediaSlider } from './components/MediaSlider';
 import { Footer } from './components/Footer';
+import { ShareWebsiteModal } from './components/ShareWebsiteModal';
 
 import {
   subscribeWorkers,
@@ -84,6 +85,7 @@ export default function App() {
   const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
   const [excelWorker, setExcelWorker] = useState<Worker | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   // --- Real-time Firestore Subscriptions ---
   useEffect(() => {
@@ -297,6 +299,7 @@ export default function App() {
         onGoToAdmin={() => setActiveView('admin')}
         onGoToPublic={() => setActiveView('public')}
         onLogout={handleLogout}
+        onOpenShare={() => setIsShareModalOpen(true)}
       />
 
       {/* Main Content */}
@@ -421,6 +424,12 @@ export default function App() {
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onSuccess={handleAdminLoginSuccess}
+      />
+
+      {/* Share / Publish Live Website Modal */}
+      <ShareWebsiteModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
       />
     </div>
   );

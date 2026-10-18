@@ -1,4 +1,5 @@
 import React from 'react';
+import { Globe } from 'lucide-react';
 
 interface NavbarProps {
   isAdminLoggedIn: boolean;
@@ -7,6 +8,7 @@ interface NavbarProps {
   onGoToAdmin: () => void;
   onGoToPublic: () => void;
   onLogout: () => void;
+  onOpenShare?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -16,6 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onGoToAdmin,
   onGoToPublic,
   onLogout,
+  onOpenShare,
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-[#0f1c2e]/92 backdrop-blur-md border-b-2 border-[#e67e22] text-white py-4 shadow-lg">
@@ -28,10 +31,23 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span className="text-[#e67e22]">Building</span> Construction
         </button>
 
-        {/* Admin Navigation Button */}
-        <div>
+        {/* Navigation Buttons */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Live Link Button */}
+          {onOpenShare && (
+            <button
+              onClick={onOpenShare}
+              className="bg-emerald-600/90 hover:bg-emerald-600 text-white text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow-sm hover:shadow-emerald-700/30 cursor-pointer border border-emerald-500/50"
+              title="View & Copy Full Live Website URL"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Live Website URL</span>
+              <span className="sm:hidden">Live Link</span>
+            </button>
+          )}
+
           {activeView === 'admin' ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={onGoToPublic}
                 className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white border border-slate-600 px-3 py-1.5 rounded hover:bg-slate-800 transition-colors cursor-pointer"
@@ -46,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </div>
           ) : isAdminLoggedIn ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5 sm:gap-3">
               <button
                 onClick={onGoToAdmin}
                 className="text-[#e67e22] text-sm font-semibold border-1.5 border-[#e67e22] px-4 py-1.5 rounded hover:bg-[#e67e22] hover:text-white transition-all duration-300 cursor-pointer shadow-sm hover:shadow-[0_0_15px_rgba(230,126,34,0.5)]"

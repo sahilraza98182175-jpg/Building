@@ -15,8 +15,10 @@ import {
   Plus,
   Trash2,
   Printer,
-  RotateCcw
+  RotateCcw,
+  FileText
 } from 'lucide-react';
+import { generateWorkerLedgerPDF } from '../utils/pdfGenerator';
 
 interface ExcelSheetModalProps {
   worker: Worker | null;
@@ -216,6 +218,10 @@ export const ExcelSheetModal: React.FC<ExcelSheetModalProps> = ({
     setSelectedYear(nextYear);
   };
 
+  const handleDownloadPDF = () => {
+    generateWorkerLedgerPDF(worker, selectedYear, selectedMonth, currentRows);
+  };
+
   const handlePrint = () => {
     window.print();
   };
@@ -282,7 +288,16 @@ export const ExcelSheetModal: React.FC<ExcelSheetModalProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            <button
+              onClick={handleDownloadPDF}
+              className="bg-red-700 hover:bg-red-800 text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer text-xs font-bold shadow-md hover:shadow-red-900/40 border border-red-600"
+              title="Download Official PDF Ledger Register"
+            >
+              <FileText className="w-4 h-4 text-white" />
+              <span>PDF Download</span>
+            </button>
+
             <button
               onClick={handlePrint}
               className="bg-white/15 hover:bg-white/30 text-white px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors cursor-pointer text-xs font-medium"
